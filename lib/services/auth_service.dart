@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthService {
   Future<User?> loginWithEmailAndPassword(String email, String password);
   Future<User?> signupWithEmailAndPAssword(String email, String password);
   User? get getCurrentUser;
-  Stream<User?> authStateChanges();
+  Stream<User?> get authStateChanges;
+
+  Future<void> signout();
 }
 
 class AuthServiceImpl extends AuthService {
@@ -15,11 +19,16 @@ class AuthServiceImpl extends AuthService {
 
   @override
   Future<User?> loginWithEmailAndPassword(String email, String password) async {
-    final user = await _firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    return user.user;
+    try {
+      final result = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return result.user;
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
   }
 
   @override
@@ -27,15 +36,27 @@ class AuthServiceImpl extends AuthService {
     String email,
     String password,
   ) async {
-    final user = await _firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    return user.user;
+    try {
+      final result = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return result.user;
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
   }
 
   @override
-  Stream<User?> authStateChanges() {
-    return _firebaseAuth.authStateChanges();
+  Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
+
+  @override
+  Future<void> signout() async {
+    try {
+      await _firebaseAuth.signOut();
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }
