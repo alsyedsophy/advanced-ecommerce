@@ -1,32 +1,29 @@
-import 'package:advanced_ecommerce/controllers/auth_controller.dart';
-import 'package:advanced_ecommerce/services/auth_service.dart';
+import 'package:advanced_ecommerce/controllers/auth/auth_cubit.dart';
+import 'package:advanced_ecommerce/controllers/auth/auth_state.dart';
+
 import 'package:advanced_ecommerce/views/pages/auth_screen.dart';
 import 'package:advanced_ecommerce/views/pages/nav_bar_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    return StreamBuilder<User?>(
-      stream: authService.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.active) {
-          final user = snapshot.data;
-          if (user == null) {
-            return ChangeNotifierProvider(
-              create: (context) => AuthController(authService: authService),
-              child: AuthScreen(),
-            );
-          } else {
-            return NavBarScreen();
-          }
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        if (state is AuthLoading) {
+          return Scaffold(body: Center(child: CircularProgressIndicator()));
         }
-        return Scaffold(body: Center(child: CircularProgressIndicator()));
+        if (state is AuthError) {
+          return Scaffold(body: Center(child: Text(state.error)));
+        }
+        if (state is AuthUnAuthenticated || state is AuthInit) {
+          return AuthScreen();
+        }
+        return NavBarScreen();
       },
     );
   }
