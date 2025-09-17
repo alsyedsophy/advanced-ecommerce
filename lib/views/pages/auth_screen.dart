@@ -1,3 +1,4 @@
+import 'package:advanced_ecommerce/controllers/auth_controller.dart';
 import 'package:advanced_ecommerce/utilities/enum.dart';
 import 'package:advanced_ecommerce/utilities/routing/app_routs.dart';
 import 'package:advanced_ecommerce/utilities/style/app_assets.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -26,7 +28,20 @@ class _AuthScreenState extends State<AuthScreen> {
   final _passwordFocusNode = FocusNode();
   final _confirmPasswordFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
-  AuthFormType authFormType = AuthFormType.login;
+
+  Future<void> _supmit(AuthController model) async {
+    try {
+      await model.supmit();
+      if (!mounted) return;
+      context.pushReplacement(AppRouts.navBar);
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(title: Text("Error"), content: Text(e.toString())),
+      );
+    }
+  }
 
   @override
   void dispose() {
@@ -38,143 +53,146 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: const EdgeInsets.only(
-          top: 150.0,
-          bottom: 80,
-          right: 16,
-          left: 16,
-        ),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                authFormType == AuthFormType.login ? "Login" : "Register",
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              Gap(73.h),
-              CustomTextField(
-                hinitText: "Email",
-                obsecureText: false,
-                controller: _emailController,
-                focusNode: _emailFocusNode,
-                onEditingComplete: () =>
-                    FocusScope.of(context).requestFocus(_passwordFocusNode),
-                textInputAction: TextInputAction.next,
-              ),
-              Gap(8.h),
-              CustomTextField(
-                hinitText: "Password",
-                obsecureText: true,
-                controller: _passwordController,
-                focusNode: _passwordFocusNode,
-                onEditingComplete: () => authFormType == AuthFormType.register
-                    ? FocusScope.of(
-                        context,
-                      ).requestFocus(_confirmPasswordFocusNode)
-                    : null,
-                textInputAction: authFormType == AuthFormType.register
-                    ? TextInputAction.next
-                    : null,
-              ),
-              Gap(8.h),
-              authFormType == AuthFormType.login
-                  ? SizedBox.shrink()
-                  : CustomTextField(
-                      hinitText: "Confirm Password",
-                      obsecureText: true,
-                      controller: _confirmPasswordController,
-                      focusNode: _confirmPasswordFocusNode,
-                    ),
-              authFormType == AuthFormType.login
-                  ? Align(
-                      alignment: Alignment.topRight,
-                      child: TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          "Forgot Password?",
-                          style: AppTextStyle.text14w500style.copyWith(
-                            color: AppColors.primaryBlackColor,
+    return Consumer<AuthController>(
+      builder: (context, model, child) {
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Padding(
+            padding: const EdgeInsets.only(
+              top: 150.0,
+              bottom: 80,
+              right: 16,
+              left: 16,
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    model.authFormType == AuthFormType.login
+                        ? "Login"
+                        : "Register",
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  Gap(73.h),
+                  CustomTextField(
+                    hinitText: "Email",
+                    obsecureText: false,
+                    controller: _emailController,
+                    focusNode: _emailFocusNode,
+                    onEditingComplete: () =>
+                        FocusScope.of(context).requestFocus(_passwordFocusNode),
+                    textInputAction: TextInputAction.next,
+                    onChanged: model.updateEmail,
+                  ),
+                  Gap(8.h),
+                  CustomTextField(
+                    hinitText: "Password",
+                    obsecureText: true,
+                    controller: _passwordController,
+                    focusNode: _passwordFocusNode,
+                    onEditingComplete: () =>
+                        model.authFormType == AuthFormType.register
+                        ? FocusScope.of(
+                            context,
+                          ).requestFocus(_confirmPasswordFocusNode)
+                        : null,
+                    textInputAction: model.authFormType == AuthFormType.register
+                        ? TextInputAction.next
+                        : null,
+                    onChanged: model.updatePassword,
+                  ),
+                  Gap(8.h),
+                  model.authFormType == AuthFormType.login
+                      ? SizedBox.shrink()
+                      : CustomTextField(
+                          hinitText: "Confirm Password",
+                          obsecureText: true,
+                          controller: _confirmPasswordController,
+                          focusNode: _confirmPasswordFocusNode,
+                        ),
+                  model.authFormType == AuthFormType.login
+                      ? Align(
+                          alignment: Alignment.topRight,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Forgot Password?",
+                              style: AppTextStyle.text14w500style.copyWith(
+                                color: AppColors.primaryBlackColor,
+                              ),
+                            ),
                           ),
+                        )
+                      : SizedBox.shrink(),
+                  Gap(20.h),
+                  MainButtom(
+                    title: model.authFormType == AuthFormType.login
+                        ? "Login"
+                        : "Register",
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _supmit(model);
+                      }
+                    },
+                  ),
+                  Gap(20.h),
+                  Center(
+                    child: InkWell(
+                      onTap: () {
+                        model.toggelFormType();
+                        _formKey.currentState!.reset();
+                      },
+                      child: Text(
+                        model.authFormType == AuthFormType.login
+                            ? "Don't have an acount? Register"
+                            : "Already have an acount? Login",
+                        style: AppTextStyle.text14w500style.copyWith(
+                          color: AppColors.primaryBlackColor,
                         ),
                       ),
-                    )
-                  : SizedBox.shrink(),
-              Gap(20.h),
-              MainButtom(
-                title: authFormType == AuthFormType.login
-                    ? "Login"
-                    : "Register",
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    GoRouter.of(context).pushReplacementNamed(AppRouts.navBar);
-                  }
-                },
-              ),
-              Gap(20.h),
-              Center(
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      if (authFormType == AuthFormType.login) {
-                        authFormType = AuthFormType.register;
-                      } else {
-                        authFormType = AuthFormType.login;
-                      }
-                    });
-                    _formKey.currentState!.reset();
-                  },
-                  child: Text(
-                    authFormType == AuthFormType.login
-                        ? "Don't have an acount? Register"
-                        : "Already have an acount? Login",
-                    style: AppTextStyle.text14w500style.copyWith(
-                      color: AppColors.primaryBlackColor,
                     ),
                   ),
-                ),
-              ),
-              Spacer(),
-              Center(
-                child: Text(
-                  authFormType == AuthFormType.login
-                      ? "Or sign up with social account"
-                      : "Or login with social account",
-                  style: AppTextStyle.text14w500style.copyWith(
-                    color: AppColors.primaryBlackColor,
-                  ),
-                ),
-              ),
-              Gap(12.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Image.asset(
-                      AppAssets.facebook,
-                      width: 92.w,
-                      height: 64.h,
+                  Spacer(),
+                  Center(
+                    child: Text(
+                      model.authFormType == AuthFormType.login
+                          ? "Or sign up with social account"
+                          : "Or login with social account",
+                      style: AppTextStyle.text14w500style.copyWith(
+                        color: AppColors.primaryBlackColor,
+                      ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Image.asset(
-                      AppAssets.google,
-                      width: 92.w,
-                      height: 64.h,
-                    ),
+                  Gap(12.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {},
+                        child: Image.asset(
+                          AppAssets.facebook,
+                          width: 92.w,
+                          height: 64.h,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Image.asset(
+                          AppAssets.google,
+                          width: 92.w,
+                          height: 64.h,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
