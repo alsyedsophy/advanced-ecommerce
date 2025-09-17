@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
     this.focusNode,
     this.onEditingComplete,
     this.textInputAction,
+    this.onChanged,
   });
 
   final String hinitText;
@@ -19,6 +20,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final FocusNode? focusNode;
   final void Function()? onEditingComplete;
+  final void Function(String)? onChanged;
   final TextInputAction? textInputAction;
 
   @override
@@ -33,6 +35,7 @@ class CustomTextField extends StatelessWidget {
         focusNode: focusNode,
         onEditingComplete: onEditingComplete,
         textInputAction: textInputAction,
+        onChanged: onChanged,
         decoration: InputDecoration(
           filled: true,
           fillColor: AppColors.whiteColor,

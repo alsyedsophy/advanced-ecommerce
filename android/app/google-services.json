@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "944296270054",
+    "project_id": "advanced-ecommerce-eba88",
+    "storage_bucket": "advanced-ecommerce-eba88.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:944296270054:android:ef81324a3ce8a236048327",
+        "android_client_info": {
+          "package_name": "com.example.advanced_ecommerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCH32e_SQc6SqEmSVXwJreerq_FP8Fc3Mk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
