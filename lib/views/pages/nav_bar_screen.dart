@@ -1,5 +1,6 @@
 import 'package:advanced_ecommerce/utilities/style/app_colors.dart';
 import 'package:advanced_ecommerce/views/pages/home_screen.dart';
+import 'package:advanced_ecommerce/views/pages/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -15,7 +16,13 @@ class _NavBarScreenState extends State<NavBarScreen> {
   final PersistentTabController _controller = PersistentTabController();
 
   List<Widget> _buildScreens() {
-    return [HomeScreen(), Container(), Container(), Container(), Container()];
+    return [
+      HomeScreen(),
+      Container(),
+      Container(),
+      Container(),
+      ProfileScreen(),
+    ];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {

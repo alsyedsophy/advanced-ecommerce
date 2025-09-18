@@ -145,6 +145,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         } else {
                           authFormType = AuthFormType.login;
                         }
+                        setState(() {});
                         _formKey.currentState!.reset();
                       },
                       child: Text(
