@@ -1,4 +1,5 @@
 import 'package:advanced_ecommerce/controllers/auth/auth_cubit.dart';
+import 'package:advanced_ecommerce/controllers/product/product_cubit.dart';
 import 'package:advanced_ecommerce/core/locator.dart';
 import 'package:advanced_ecommerce/firebase_options.dart';
 import 'package:advanced_ecommerce/services/auth_service.dart';
@@ -23,8 +24,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: Size(375, 875),
-      builder: (context, child) => BlocProvider(
-        create: (context) => AuthCubit(locator<AuthServiceImpl>()),
+      builder: (context, child) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => AuthCubit(locator<AuthServiceImpl>()),
+          ),
+          BlocProvider(create: (context) => ProductCubit()),
+        ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: 'E commerce',
