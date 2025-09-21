@@ -1,7 +1,9 @@
+import 'package:advanced_ecommerce/models/product.dart';
 import 'package:advanced_ecommerce/utilities/routing/app_routs.dart';
 import 'package:advanced_ecommerce/views/pages/auth_screen.dart';
 import 'package:advanced_ecommerce/views/pages/landing_screen.dart';
-import 'package:advanced_ecommerce/views/pages/nav_bar_screen.dart';
+import 'package:advanced_ecommerce/views/pages/main%20screens/nav_bar_screen.dart';
+import 'package:advanced_ecommerce/views/pages/product_details_screen.dart';
 import 'package:go_router/go_router.dart';
 
 class ConfigRouting {
@@ -22,6 +24,14 @@ class ConfigRouting {
         path: AppRouts.navBar,
         name: AppRouts.navBar,
         builder: (context, state) => NavBarScreen(),
+      ),
+      GoRoute(
+        path: AppRouts.productScreen,
+        name: AppRouts.productScreen,
+        builder: (context, state) {
+          Product product = state.extra as Product;
+          return ProductDetailsScreen(product: product);
+        },
       ),
     ],
   );

@@ -1,33 +1,34 @@
-import 'package:advanced_ecommerce/utilities/style/app_assets.dart';
-
-class Product {
+class CartModel {
   final String id;
   final String title;
   final String price;
   final String imageUrl;
   final int? descountValue;
   final String? category;
-  final int rate;
+  final String size;
+  final String color;
 
-  Product({
+  CartModel({
     required this.id,
     required this.title,
     required this.price,
     required this.imageUrl,
-    this.descountValue,
-    this.category = "others",
-    required this.rate,
+    required this.descountValue,
+    required this.category,
+    required this.size,
+    required this.color,
   });
 
-  factory Product.fromMap(Map<String, dynamic> data, String productId) {
-    return Product(
+  factory CartModel.fromMap(Map<String, dynamic> data, String productId) {
+    return CartModel(
       id: productId,
       title: data["title"],
       price: data["price"],
       imageUrl: data["imageUrl"],
       descountValue: data['descountValue'],
       category: data['category'],
-      rate: data['rate'],
+      size: data['size'],
+      color: data['color'],
     );
   }
 
@@ -39,7 +40,8 @@ class Product {
       'imageUrl': imageUrl,
       'descountValue': descountValue,
       'category': category,
-      'rate': rate,
+      'size': size,
+      'color': color,
     };
   }
 }
