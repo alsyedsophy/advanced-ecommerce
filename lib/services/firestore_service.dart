@@ -20,6 +20,27 @@ class FirestoreService {
     }
   }
 
+  // Future<Map<String, dynamic>?> getData(String path) async {
+  //   try {
+  //     final refrance = _fireStore.doc(path);
+  //     final result = await refrance.get();
+  //     return result.data() as Map<String, dynamic>;
+  //   } catch (e) {
+  //     log(e.toString());
+  //     rethrow;
+  //   }
+  // }
+  //
+  // Future<void> updateData(String path, Map<String, dynamic> data) async {
+  //   try {
+  //     final refrance = _fireStore.doc(path);
+  //     await refrance.update(data);
+  //   } catch (e) {
+  //     log(e.toString());
+  //     rethrow;
+  //   }
+  // }
+
   Future<void> deleteData({required String path}) async {
     try {
       final refrance = _fireStore.doc(path);

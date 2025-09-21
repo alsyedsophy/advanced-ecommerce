@@ -1,6 +1,6 @@
 import 'package:advanced_ecommerce/utilities/style/app_colors.dart';
-import 'package:advanced_ecommerce/views/pages/home_screen.dart';
-import 'package:advanced_ecommerce/views/pages/profile_screen.dart';
+import 'package:advanced_ecommerce/views/pages/main%20screens/home_screen.dart';
+import 'package:advanced_ecommerce/views/pages/main%20screens/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';

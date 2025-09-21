@@ -1,5 +1,8 @@
 import 'dart:developer';
 
+import 'package:advanced_ecommerce/core/locator.dart';
+import 'package:advanced_ecommerce/services/firestore_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthService {
@@ -13,6 +16,7 @@ abstract class AuthService {
 
 class AuthServiceImpl extends AuthService {
   final _firebaseAuth = FirebaseAuth.instance;
+  final FirestoreService _firestoreService = locator<FirestoreService>();
 
   @override
   User? get getCurrentUser => _firebaseAuth.currentUser;
@@ -24,9 +28,11 @@ class AuthServiceImpl extends AuthService {
         email: email,
         password: password,
       );
+
       return result.user;
     } catch (e) {
-      log(e.toString());
+      // log("===============================");
+      // log(e.toString());
       return null;
     }
   }
@@ -41,9 +47,16 @@ class AuthServiceImpl extends AuthService {
         email: email,
         password: password,
       );
+      if (result.user != null) {
+        log(result.user!.uid);
+        await _firestoreService.setData(
+          path: 'users/${result.user!.uid}',
+          data: {'uid': result.user!.uid, 'email': email},
+        );
+      }
       return result.user;
     } catch (e) {
-      log(e.toString());
+      // log(e.toString());
       return null;
     }
   }
@@ -56,7 +69,7 @@ class AuthServiceImpl extends AuthService {
     try {
       await _firebaseAuth.signOut();
     } catch (e) {
-      log(e.toString());
+      // log(e.toString());
     }
   }
 }
