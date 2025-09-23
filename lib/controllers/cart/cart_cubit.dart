@@ -1,6 +1,7 @@
 import 'package:advanced_ecommerce/controllers/cart/cart_state.dart';
 import 'package:advanced_ecommerce/core/locator.dart';
 import 'package:advanced_ecommerce/models/cart_model.dart';
+import 'package:advanced_ecommerce/models/delivary_model.dart';
 import 'package:advanced_ecommerce/services/cart_service.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -34,5 +35,9 @@ class CartCubit extends Cubit<CartState> {
   Stream<List<CartModel>> getCartItem() {
     emit(CatrLoading());
     return _cartService.getCart();
+  }
+
+  Stream<List<DelivaryModel>> getDelivary() {
+    return _cartService.getDelivary();
   }
 }

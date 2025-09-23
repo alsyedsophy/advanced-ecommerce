@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:advanced_ecommerce/core/locator.dart';
 import 'package:advanced_ecommerce/models/cart_model.dart';
+import 'package:advanced_ecommerce/models/delivary_model.dart';
 import 'package:advanced_ecommerce/services/auth_service.dart';
 import 'package:advanced_ecommerce/services/firestore_service.dart';
 
@@ -46,6 +47,18 @@ class CartService {
       );
     } catch (e) {
       log('List Cart of Model Error : ${e.toString()}');
+      rethrow;
+    }
+  }
+
+  Stream<List<DelivaryModel>> getDelivary() {
+    try {
+      return _firestoreService.collectionsStream(
+        path: 'delivary',
+        builder: (data, documintId) => DelivaryModel.fromMap(data!, documintId),
+      );
+    } catch (e) {
+      log('List Delivary of Model Error : ${e.toString()}');
       rethrow;
     }
   }

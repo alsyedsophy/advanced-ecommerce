@@ -1,5 +1,4 @@
 import 'package:advanced_ecommerce/controllers/cart/cart_cubit.dart';
-import 'package:advanced_ecommerce/controllers/product/product_cubit.dart';
 import 'package:advanced_ecommerce/models/cart_model.dart';
 import 'package:advanced_ecommerce/models/product.dart';
 import 'package:advanced_ecommerce/utilities/style/app_colors.dart';

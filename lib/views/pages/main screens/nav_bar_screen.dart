@@ -1,4 +1,5 @@
 import 'package:advanced_ecommerce/utilities/style/app_colors.dart';
+import 'package:advanced_ecommerce/views/pages/main%20screens/cart_screen.dart';
 import 'package:advanced_ecommerce/views/pages/main%20screens/home_screen.dart';
 import 'package:advanced_ecommerce/views/pages/main%20screens/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +20,7 @@ class _NavBarScreenState extends State<NavBarScreen> {
     return [
       HomeScreen(),
       Container(),
-      Container(),
+      CartScreen(),
       Container(),
       ProfileScreen(),
     ];
