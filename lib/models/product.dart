@@ -1,5 +1,3 @@
-import 'package:advanced_ecommerce/utilities/style/app_assets.dart';
-
 class Product {
   final String id;
   final String title;

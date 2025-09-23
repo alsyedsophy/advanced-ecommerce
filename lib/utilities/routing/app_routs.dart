@@ -3,4 +3,5 @@ class AppRouts {
   static const String auth = "/auth";
   static const String navBar = "/navBar";
   static const String productScreen = "/productScreen";
+  static const String chackoutScreen = "/chackoutScreen";
 }
