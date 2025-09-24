@@ -7,17 +7,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class ShippingAddressComponant extends StatelessWidget {
-  const ShippingAddressComponant({
-    super.key,
-    required this.shippingAddressModel,
-  });
+class ShippingAddressState extends StatefulWidget {
+  const ShippingAddressState({super.key, required this.shippingAddressModel});
   final ShippingAddressModel shippingAddressModel;
 
   @override
+  State<ShippingAddressState> createState() => _ShippingAddressStateState();
+}
+
+class _ShippingAddressStateState extends State<ShippingAddressState> {
+  late bool checkedValue = widget.shippingAddressModel.isActive;
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 108.h,
+      height: 160.h,
       width: double.infinity,
       child: Card(
         color: AppColors.whiteColor,
@@ -30,15 +33,18 @@ class ShippingAddressComponant extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    shippingAddressModel.fullname,
+                    widget.shippingAddressModel.fullname,
                     style: AppTextStyle.categoryItemStyle,
                   ),
                   InkWell(
                     onTap: () {
-                      context.pushNamed(AppRouts.shippingAddresses);
+                      context.pushNamed(
+                        AppRouts.addingShippingAddress,
+                        extra: widget.shippingAddressModel,
+                      );
                     },
                     child: Text(
-                      "Change",
+                      "Edit",
                       style: AppTextStyle.categoryItemStyle.copyWith(
                         color: AppColors.primaryColor,
                       ),
@@ -48,12 +54,23 @@ class ShippingAddressComponant extends StatelessWidget {
               ),
               Gap(8.h),
               Text(
-                shippingAddressModel.address,
+                widget.shippingAddressModel.address,
                 style: AppTextStyle.text14w500style,
               ),
               Text(
-                shippingAddressModel.country,
+                widget.shippingAddressModel.country,
                 style: AppTextStyle.text14w500style,
+              ),
+              CheckboxListTile(
+                title: Text("Use as Shipping Address"),
+                value: checkedValue,
+                onChanged: (value) {
+                  setState(() {
+                    checkedValue = value!;
+                  });
+                },
+                contentPadding: EdgeInsets.zero,
+                controlAffinity: ListTileControlAffinity.leading,
               ),
             ],
           ),

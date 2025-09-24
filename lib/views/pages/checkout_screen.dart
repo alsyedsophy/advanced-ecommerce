@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:advanced_ecommerce/controllers/cart/cart_cubit.dart';
+import 'package:advanced_ecommerce/controllers/shipping%20address/shipping_cubit.dart';
+import 'package:advanced_ecommerce/utilities/routing/app_routs.dart';
 import 'package:advanced_ecommerce/utilities/style/app_colors.dart';
 import 'package:advanced_ecommerce/utilities/style/app_text_style.dart';
 import 'package:advanced_ecommerce/views/widgets/checkout/delivary_campany.dart';
@@ -11,6 +13,7 @@ import 'package:advanced_ecommerce/views/widgets/order_summery_componant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatelessWidget {
@@ -31,7 +34,39 @@ class CheckoutScreen extends StatelessWidget {
             children: [
               Text("Shipping Address", style: AppTextStyle.text24BoldStyle),
               Gap(22.h),
-              ShippingAddressComponant(),
+              StreamBuilder(
+                stream: context.read<ShippingCubit>().getAllShipping(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator.adaptive());
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: Text(snapshot.error.toString()));
+                  }
+                  if (snapshot.hasData) {
+                    if (snapshot.data == null || snapshot.data!.isEmpty) {
+                      return Column(
+                        children: [
+                          Center(child: Text("No Address Found")),
+                          InkWell(
+                            onTap: () {
+                              context.pushNamed(AppRouts.addingShippingAddress);
+                            },
+                            child: Text(
+                              "Add One",
+                              style: AppTextStyle.text24BoldStyle.copyWith(
+                                color: AppColors.primaryColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+                  }
+                  final model = snapshot.data!.first;
+                  return ShippingAddressComponant(shippingAddressModel: model);
+                },
+              ),
               Gap(56.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
