@@ -1,10 +1,13 @@
 import 'package:advanced_ecommerce/models/product.dart';
+import 'package:advanced_ecommerce/models/shipping_address_model.dart';
 import 'package:advanced_ecommerce/utilities/routing/app_routs.dart';
+import 'package:advanced_ecommerce/views/pages/addipng_shipping_address.dart';
 import 'package:advanced_ecommerce/views/pages/auth_screen.dart';
 import 'package:advanced_ecommerce/views/pages/checkout_screen.dart';
 import 'package:advanced_ecommerce/views/pages/landing_screen.dart';
 import 'package:advanced_ecommerce/views/pages/main%20screens/nav_bar_screen.dart';
 import 'package:advanced_ecommerce/views/pages/product_details_screen.dart';
+import 'package:advanced_ecommerce/views/pages/shipping_addresses.dart';
 import 'package:go_router/go_router.dart';
 
 class ConfigRouting {
@@ -30,6 +33,22 @@ class ConfigRouting {
         path: AppRouts.chackoutScreen,
         name: AppRouts.chackoutScreen,
         builder: (context, state) => CheckoutScreen(),
+      ),
+      GoRoute(
+        path: AppRouts.addingShippingAddress,
+        name: AppRouts.addingShippingAddress,
+        builder: (context, state) {
+          final ShippingAddressModel? shippingAddressModel =
+              state.extra as ShippingAddressModel?;
+          return AddipngShippingAddress(
+            shippingAddressModel: shippingAddressModel,
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRouts.shippingAddresses,
+        name: AppRouts.shippingAddresses,
+        builder: (context, state) => ShippingAddresses(),
       ),
       GoRoute(
         path: AppRouts.productScreen,

@@ -1,6 +1,7 @@
 import 'package:advanced_ecommerce/controllers/auth/auth_cubit.dart';
 import 'package:advanced_ecommerce/controllers/cart/cart_cubit.dart';
 import 'package:advanced_ecommerce/controllers/product/product_cubit.dart';
+import 'package:advanced_ecommerce/controllers/shipping%20address/shipping_cubit.dart';
 import 'package:advanced_ecommerce/core/locator.dart';
 import 'package:advanced_ecommerce/firebase_options.dart';
 import 'package:advanced_ecommerce/services/auth_service.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(create: (context) => ProductCubit()),
           BlocProvider(create: (context) => CartCubit()),
+          BlocProvider(create: (context) => ShippingCubit()),
         ],
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
